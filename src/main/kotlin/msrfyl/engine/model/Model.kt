@@ -1,4 +1,4 @@
-package msrfyl.engine
+package msrfyl.engine.model
 
 enum class Criteria {
     EQ, // EQUAL
@@ -23,3 +23,8 @@ class FilterData(
 )
 
 class JoinObject(val name: String, val clazz: Class<*>)
+
+class JoinObjectQuery(val name: String, val clazz: Class<*>, val from: String = "", val to: String = "") {
+    val nameClazz = clazz.name.split(".").last()
+    val aliasClazzName = nameClazz.lowercase()
+}

@@ -1,7 +1,12 @@
-package msrfyl.engine
+package msrfyl.engine.finddata
 
 import jakarta.persistence.EntityManager
 import jakarta.persistence.criteria.*
+import msrfyl.engine.*
+import msrfyl.engine.model.Criteria
+import msrfyl.engine.model.FilterData
+import msrfyl.engine.model.JoinObject
+import msrfyl.engine.repository.UniversalRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification

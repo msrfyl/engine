@@ -2,27 +2,43 @@ package msrfyl.engine
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.slf4j.LoggerFactory
-import org.springframework.context.ApplicationContext
-import org.springframework.context.ApplicationContextAware
-import org.springframework.stereotype.Component
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
-object U {
-
-    val logger = LoggerFactory.getLogger("msrfyl.engine")!!
-
-    fun toJsonString(any: Any): String = jacksonObjectMapper().writeValueAsString(any)
-    fun <T> jsonReadValue(v: String, any: Class<T>): T = jacksonObjectMapper().readValue(v, any)
-
-}
-
-@Component
-class AppContext : ApplicationContextAware {
-    override fun setApplicationContext(context: ApplicationContext) {
-        CONTEXT = context
-    }
+class U {
 
     companion object {
-        private var CONTEXT: ApplicationContext? = null
-        fun <T> getBean(clazz: Class<T>): T = CONTEXT!!.getBean(clazz)
+        val logger = LoggerFactory.getLogger("msrfyl.engine")!!
+
+        fun toJsonString(any: Any): String = jacksonObjectMapper().writeValueAsString(any)
+        fun <T> jsonReadValue(v: String, any: Class<T>): T = jacksonObjectMapper().readValue(v, any)
+        fun patternFormat(pattern: String, locale: Locale = Locale.ENGLISH): DateTimeFormatter =
+            DateTimeFormatter.ofPattern(pattern, locale)
     }
+
+    data class UString(val v: String) {
+        fun toLocalDate(pattern: String = "yyyy-MM-dd"): LocalDate = LocalDate.parse(v, patternFormat(pattern))
+        fun toLocalDatetime(pattern: String = "yyyy-MM-dd HH:mm:ss"): LocalDateTime =
+            LocalDateTime.parse(v, patternFormat(pattern))
+
+        fun toLocalTime(pattern: String = "HH:mm:ss"): LocalTime = LocalTime.parse(v, patternFormat(pattern))
+    }
+
+    data class ULocalDate(val v: LocalDate) {
+        fun format(pattern: String = "yyyy-MM-dd"): String = v.format(patternFormat(pattern))
+        fun toStartOfDay(): LocalDateTime = LocalDateTime.of(v, LocalTime.of(0, 0, 0))
+        fun toEndOfDay(): LocalDateTime = LocalDateTime.of(v, LocalTime.of(23, 59, 59))
+    }
+
+    data class ULocalDatetime(val v: LocalDateTime) {
+        fun format(pattern: String = "yyyy-MM-dd HH:mm:ss"): String = v.format(patternFormat(pattern))
+    }
+
+    data class ULocalTime(val v: LocalTime) {
+        fun format(pattern: String = "HH:mm:ss"): String = v.format(patternFormat(pattern))
+    }
+
 }

@@ -1,4 +1,4 @@
-package msrfyl.engine
+package msrfyl.engine.repository
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.repository.CrudRepository

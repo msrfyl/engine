@@ -1,4 +1,4 @@
-package msrfyl.engine
+package msrfyl.engine.temporary
 
 import java.time.LocalDateTime
 
@@ -16,6 +16,7 @@ class TemporaryData<T> private constructor(
             if (!it) {
                 data = getData(data)
                 lastUpdate = LocalDateTime.now()
+                mapProcessing[name] = true
             }
         }
         return data
@@ -25,7 +26,7 @@ class TemporaryData<T> private constructor(
         private val mapProcessing = mutableMapOf<String, Boolean>()
         private val mapBuffer = mutableMapOf<String, TemporaryData<*>>()
         fun <T> register(name: String, data: T, getData: (T) -> T): TemporaryData<T> {
-            mapProcessing[name] = true
+            mapProcessing[name] = false
             mapBuffer[name] = TemporaryData(name, data, getData)
             @Suppress("UNCHECKED_CAST")
             return mapBuffer[name] as TemporaryData<T>
